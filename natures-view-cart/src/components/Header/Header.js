@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import { useStateValue } from '../StateProvider';
+import { useStateValue } from '../stateProvider/StateProvider';
 import { getAuth, signOut } from 'firebase/auth';
 
 function Header() {
