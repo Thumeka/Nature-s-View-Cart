@@ -3,7 +3,7 @@ import './Product.css';
 import { useStateValue } from '../stateProvider/StateProvider';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-function Product({ id, title, price, rating, image }) {
+function Product({ id, title, price, rating, image, category, subcategory }) {
     const [, dispatch] = useStateValue();
     const [uploading, setUploading] = useState(false);
     const [uploadedImage, setUploadedImage] = useState(image);
@@ -45,6 +45,7 @@ function Product({ id, title, price, rating, image }) {
         <div className="product">
             <div className="product__info">
                 <p>{title}</p>
+                <p className="product__category">{category} / {subcategory}</p>
                 <p className="product__price">
                     <medium>R</medium>
                     <strong>{price}</strong>
@@ -64,3 +65,4 @@ function Product({ id, title, price, rating, image }) {
 }
 
 export default Product;
+
