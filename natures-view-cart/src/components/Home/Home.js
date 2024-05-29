@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import Product from '../product/Product';
 import { db } from '../../firebase';
@@ -12,25 +12,29 @@ function Home() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const productsCollection = collection(db, 'products');
-            const productsSnapshot = await getDocs(productsCollection);
-            const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setProducts(productsList);
+            try {
+                const productsCollection = collection(db, 'products');
+                const productsSnapshot = await getDocs(productsCollection);
+                const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setProducts(productsList);
 
-            // Extract unique categories and subcategories from products
-            const categoryMap = {};
-            productsList.forEach(product => {
-                if (!categoryMap[product.category]) {
-                    categoryMap[product.category] = new Set();
-                }
-                categoryMap[product.category].add(product.subcategory);
-            });
+                // Extract unique categories and subcategories from products
+                const categoryMap = {};
+                productsList.forEach(product => {
+                    if (!categoryMap[product.category]) {
+                        categoryMap[product.category] = new Set();
+                    }
+                    categoryMap[product.category].add(product.subcategory);
+                });
 
-            const uniqueCategories = Object.keys(categoryMap).map(category => ({
-                name: category,
-                subcategories: Array.from(categoryMap[category])
-            }));
-            setCategories(uniqueCategories);
+                const uniqueCategories = Object.keys(categoryMap).map(category => ({
+                    name: category,
+                    subcategories: Array.from(categoryMap[category])
+                }));
+                setCategories(uniqueCategories);
+            } catch (error) {
+                console.error("Error fetching products: ", error);
+            }
         };
 
         fetchProducts();
@@ -55,8 +59,8 @@ function Home() {
     };
 
     return (
-        <div className="home">
-            <img className="home__image" src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/Logo.png?alt=media&token=26afe3eb-41d9-4777-af31-dac3499d6dee" alt="Banner" />
+        <>
+            <div className="home__background"></div>
 
             <div className="home__categories">
                 {categories.map((category, index) => (
@@ -112,28 +116,31 @@ function Home() {
 
                 <div className="box-container">
                     <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/dose-juice-atUjuLuFEcc-unsplash%20(1).jpg?alt=media&token=856481ac-3a8c-48ff-aaa8-a2186afd346d" alt="Fresh and Organic" />
+                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/dose-juice-atUjuLuFEcc-unsplash%20(1).jpg?alt=media&token=856481ac-3a8c-48ff-aaa8-a2186afd346d" alt="Fresh vegetables and fruits" />
                         <h3>fresh and organic</h3>
                         <p>Fresh vegetables and fruits at cheap prices.</p>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                         <a href="#" className="btn">read more</a>
                     </div>
 
                     <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/rowan-freeman-clYlmCaQbzY-unsplash.jpg?alt=media&token=f8a5783a-4633-4cba-9069-63157bad0ab9" alt="Free Delivery" />
+                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/rowan-freeman-clYlmCaQbzY-unsplash.jpg?alt=media&token=f8a5783a-4633-4cba-9069-63157bad0ab9" alt="Fast delivery service" />
                         <h3>free delivery</h3>
                         <p>We always do fast delivery for our customers.</p>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                         <a href="#" className="btn">read more</a>
                     </div>
 
                     <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/63559496-online-shopping-with-credit-card-easy-payment-for-order-with-plastic-card-through-internet.jpg?alt=media&token=61396e55-aea5-463d-ae43-8b773ea3373a" alt="Easy Payments" />
+                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/63559496-online-shopping-with-credit-card-easy-payment-for-order-with-plastic-card-through-internet.jpg?alt=media&token=61396e55-aea5-463d-ae43-8b773ea3373a" alt="Easy payment options" />
                         <h3>easy payments</h3>
                         <p>It's very easy to pay on our website.</p>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                         <a href="#" className="btn">read more</a>
                     </div>
                 </div>
             </section>
-        </div>
+        </>
     );
 }
 

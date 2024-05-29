@@ -1,146 +1,141 @@
 /* Home.css */
 
-/* General Home Styles */
-.home {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.home__image {
+.home__background {
     width: 100%;
-    max-width: 1200px;
-    margin-bottom: 20px;
+    height: 300px; /* Adjust as needed */
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/Logo.png?alt=media&token=26afe3eb-41d9-4777-af31-dac3499d6dee');
+    background-size: cover;
+    background-position: center;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    margin-bottom: 20px; /* Adjust as needed */
 }
 
 .home__categories {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 20px;
+    justify-content: center;
+    position: relative;
+    z-index: 1; /* Ensure it is above the background */
 }
 
 .home__categoryButton {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    margin: 5px;
+    background-color: orange; /* Set background to orange */
     border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .home__categoryButton:hover {
-    background-color: #45a049;
+    background-color: #ff8c00; /* Darker shade of orange for hover effect */
 }
 
 .home__subcategory {
-    text-align: center;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .home__subcategories {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .home__subcategoryItem {
-    background-color: #2196F3;
-    color: white;
-    padding: 10px 15px;
-    margin: 5px;
+    background-color: #f0f0f0;
     border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .home__subcategoryItem:hover {
-    background-color: #1e88e5;
+    background-color: #ddd;
 }
 
 .home__row {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
-/* Features Section */
 .features {
-    padding: 50px 0;
+    padding: 20px 0;
     text-align: center;
-    background-color: #FF6600;
 }
 
 .features .heading {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 20px;
 }
 
 .features .heading span {
-    color: #fff;
-    background-color: #FF6600;
-    padding: 0 10px;
-    border-radius: 5px;
+    color: #ff6347;
 }
 
 .features .box-container {
     display: flex;
+    gap: 20px;
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: stretch; /* Ensure all boxes have the same height */
 }
 
 .features .box {
-    background: #fff;
-    border: 2px solid transparent;
+    background-color: #fff;
     border-radius: 10px;
-    margin: 10px;
-    padding: 20px;
-    width: 200px;
-    height: 300px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, border-color 0.3s;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    width: 20%; /* Set width to make them medium-sized */
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .features .box:hover {
     transform: translateY(-10px);
-    border-color: #00008b;
 }
 
 .features .box img {
-    width: 100%;
-    height: 100px;
-    border-radius: 10px 10px 0 0;
-    margin-bottom: 15px;
+    width: 90%;
+    height: 150px;
 }
 
 .features .box h3 {
     font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #00008b;
+    margin: 10px 0;
 }
 
 .features .box p {
     font-size: 1rem;
-    margin-bottom: 15px;
-    color: #666;
+    color: #555;
+    margin-bottom: 10px;
+    flex-grow: 1; /* Ensure the paragraph takes up available space */
 }
 
 .features .box .btn {
-    background: #fff;
-    color: #00008b;
+    background-color: #ff6347;
+    color: #fff;
     padding: 10px 20px;
-    border: 2px solid #00008b;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
     text-decoration: none;
-    display: inline-block;
-    transition: background 0.3s, color 0.3s;
+    transition: background-color 0.3s ease;
+    align-self: flex-end; /* Align the button to the bottom */
 }
 
 .features .box .btn:hover {
-    background: #00008b;
-    color: #fff;
+    background-color: #e5533d;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 
 function Login() {
@@ -10,7 +11,7 @@ function Login() {
 
     const signIn = (event) => {
         event.preventDefault();
-        auth.signInWithEmailAndPassword(email, password)
+        signInWithEmailAndPassword(auth, email, password)
             .then((auth) => {
                 // redirect to home page
                 navigate('/');
@@ -22,7 +23,7 @@ function Login() {
 
     const register = (event) => {
         event.preventDefault();
-        auth.createUserWithEmailAndPassword(email, password)
+        createUserWithEmailAndPassword(auth, email, password)
             .then((auth) => {
                 // create a user, login and redirect to homepage
                 navigate('/');
@@ -66,13 +67,13 @@ function Login() {
                         Sign in
                     </button>
                     <p>
-                        By signing in you agree to Nature's View Cart's conditions of use and sale. Please see our privacy notice, our cookies notice and our interest-based ad notice.
+                        By signing in you agree to Nature's View Cart's conditions of use and sale. Please see our privacy notice, our cookies notice, and our interest-based ad notice.
                     </p>
                     <button 
                         onClick={register} 
                         className="login__registerBtn"
                     >
-                        Create your Natures View Cart account
+                        Create your Nature's View Cart account
                     </button>
                 </form>
             </div>

@@ -1,0 +1,159 @@
+.footer {
+    background-color: #006400;
+    padding: 40px 0;
+    color: #fff;
+    font-size: 12px;
+}
+
+.footer__container {
+    max-width: 1170px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer__row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.footer__column {
+    width: 25%;
+    padding: 0 10px;
+}
+
+.footer__column h4 {
+    font-size: 16px;
+    color: #fff;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+    font-weight: 500;
+    position: relative;
+}
+
+.footer__column h4::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    height: 2px;
+    box-sizing: border-box;
+    width: 50px;
+    background-color: #e91e63;
+}
+
+.footer__column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer__column ul li {
+    margin-bottom: 8px;
+}
+
+.footer__column ul li button {
+    background: none;
+    border: none;
+    color: #bbb;
+    cursor: pointer;
+    padding: 0;
+}
+
+.footer__column ul li button:hover {
+    color: #fff;
+    padding-left: 8px;
+}
+
+.footer__social-links {
+    margin-top: 10px;
+}
+
+.footer__social-links button {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 8px 8px 0;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    color: #fff;
+    transition: all 0.5s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.footer__social-links button:hover {
+    color: #3e4a4f;
+    background-color: #fff;
+}
+
+.footer__bottom {
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    border-top: 1px solid #bbb;
+    padding-top: 10px;
+}
+
+.footer__bottom p {
+    margin: 0;
+    color: #bbb;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    background: #E6E6FA;
+    padding: 30px;
+    border-radius: 10px;
+    outline: none;
+    color: #444;
+    max-width: 500px;
+    width: 90%;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.modal-close-button:hover {
+    transform: scale(1.2);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    transition: background 0.3s ease-in-out;
+}
