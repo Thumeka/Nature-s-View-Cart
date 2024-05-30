@@ -1,8 +1,19 @@
 .checkout {
     display: flex;
     padding: 20px;
-    background-color: white;
+    background-color: #f3f3f3;
     height: max-content;
+}
+
+.checkout__left {
+    flex: 0.75;
+}
+
+.checkout__ad {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover; 
+    margin-bottom: 10px;
 }
 
 .checkout__title {
@@ -11,8 +22,95 @@
     border-bottom: 1px solid lightgray;
 }
 
-.checkout__ad {
+.checkout__right {
+    flex: 0.25;
+    background-color: white;
+    padding: 20px;
+    margin-left: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.checkout__basket {
+    margin: 20px 0;
+}
+
+.checkout__product {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.checkout__product img {
+    object-fit: contain;
+    width: 180px;
+    height: 180px;
+}
+
+.checkout__productInfo {
+    padding-left: 20px;
+}
+
+.checkout__productInfo p {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.checkout__productPrice {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.checkout__productRating {
+    display: flex;
+}
+
+.checkout__productRating p {
+    font-size: 16px;
+    color: orange;
+}
+
+.checkout__product button {
+    background: #f0c14b;
+    border: 1px solid;
+    margin-top: 10px;
+    color: #111;
+    border-color: #a88734 #9c7e31 #846a29;
+    cursor: pointer;
+}
+
+.checkout__product button:hover {
+    background: #ddb347;
+}
+
+.checkout__subtotal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid lightgray;
+    background-color: white;
+    border-radius: 3px;
     width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.checkout__subtotal h2 {
+    margin-bottom: 20px;
+}
+
+.checkout__subtotal button {
+    background: #f0c14b;
+    border: 1px solid;
+    color: #111;
+    border-color: #a88734 #9c7e31 #846a29;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.checkout__subtotal button:hover {
+    background: #ddb347;
 }

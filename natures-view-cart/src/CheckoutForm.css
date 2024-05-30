@@ -1,0 +1,65 @@
+.checkoutForm {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.checkoutForm h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.StripeElement {
+    background-color: white;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    transition: box-shadow 150ms ease;
+    width: 100%;
+    font-size: 16px;
+}
+
+.StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+
+.checkoutForm button {
+    width: 100%;
+    background-color: #f0c14b;
+    color: #111;
+    padding: 10px;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.checkoutForm button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.checkoutForm button:hover {
+    background-color: #ddb347;
+}
+
+#card-errors {
+    color: #fa755a;
+    margin-top: 10px;
+    text-align: center;
+}
