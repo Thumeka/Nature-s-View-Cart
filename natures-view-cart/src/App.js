@@ -63,6 +63,7 @@ function App() {
             } 
           />
           <Route path="/" element={<><Header /><Home /><Footer /></>} />
+          <Route path="/category/:category" element={<><Header /><Home /><Footer /></>} />
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 Modal.setAppElement('#root');
@@ -8,6 +9,7 @@ function Footer() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const currentYear = new Date().getFullYear();
+    const navigate = useNavigate();
 
     const aboutUsContent = `
         Welcome to Natures View Cart, your go-to e-commerce platform for affordable, organic groceries. 
@@ -18,25 +20,25 @@ function Footer() {
 
     const ourServicesContent = `
         At Natures View Cart, we are committed to providing an exceptional shopping experience with our wide range of services: 
-		
+
         1. **Organic Grocery Delivery**: We offer a diverse selection of organic groceries delivered straight to your doorstep, ensuring convenience and quality. 
-		
+
         2. **Fresh Produce**: Our produce is sourced from trusted organic farms, guaranteeing freshness and sustainability. 
         3. **Customer Support**: Our dedicated support team is always ready to assist you with any inquiries or issues, ensuring a smooth shopping experience.
-		
+
         4. **Secure Payment Options**: We provide multiple secure payment methods, including credit/debit cards, online banking, and digital wallets, to cater to your preferences.
-		
+
         5. **Flexible Returns**: We have a customer-friendly return policy to ensure your satisfaction with every purchase. 
         6. **Exclusive Offers**: Enjoy special discounts and promotions available only to our registered customers, helping you save on your organic grocery needs.
     `;
 
     const privacyPolicyContent = `
         Privacy Policy for Nature's Cart, accessible from our website, is one of our main priorities in terms of privacy of our visitors. 
-		
+
         This Privacy Policy document contains types of information that is collected and recorded by Nature's Cart and how we use it. 
-		
+
         By using our website, you hereby consent to our Privacy Policy and agree to its terms. We collect personal information you are asked to provide, 
-		
+
         and the reasons why you are asked to provide it will be made clear to you at the point we ask you to provide your personal information.
     `;
 
@@ -47,6 +49,10 @@ function Footer() {
 
     const closeModal = () => {
         setModalIsOpen(false);
+    };
+
+    const navigateToCategory = (category) => {
+        navigate(`/category/${category}`);
     };
 
     return (
@@ -73,12 +79,12 @@ function Footer() {
                     <div className="footer__column">
                         <h4>Shop</h4>
                         <ul>
-                            <li><button onClick={() => openModal('Available vegetables...')}>Vegetables</button></li>
-                            <li><button onClick={() => openModal('Available fruits...')}>Fruits</button></li>
-                            <li><button onClick={() => openModal('Available dairy products...')}>Dairy</button></li>
-                            <li><button onClick={() => openModal('Available bakery items...')}>Bakery</button></li>
-                            <li><button onClick={() => openModal('Available poultry products...')}>Poultry</button></li>
-                            <li><button onClick={() => openModal('Available meat products...')}>Meat</button></li>
+                            <li><button onClick={() => navigateToCategory('Vegetables')}>Vegetables</button></li>
+                            <li><button onClick={() => navigateToCategory('Fruits')}>Fruits</button></li>
+                            <li><button onClick={() => navigateToCategory('Dairy')}>Dairy</button></li>
+                            <li><button onClick={() => navigateToCategory('Bakery')}>Bakery</button></li>
+                            <li><button onClick={() => navigateToCategory('Poultry')}>Poultry</button></li>
+                            <li><button onClick={() => navigateToCategory('Meat')}>Meat</button></li>
                         </ul>
                     </div>
                     <div className="footer__column">
