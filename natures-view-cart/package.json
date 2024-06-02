@@ -20,10 +20,10 @@
     "firebase-admin": "^12.1.1",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.3.1",
-    "react-currency-format": "^1.1.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-modal": "^3.16.1",
+    "react-number-format": "^5.4.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "react-tippy": "^1.4.0",
@@ -61,5 +61,9 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-private-property-in-object": "^7.24.5",
     "jest": "^29.7.0"
+  },
+  "moduleNameMapper": {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/_mocks_/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/_mocks_/styleMock.js"
   }
 }
