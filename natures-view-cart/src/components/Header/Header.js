@@ -1,139 +1,114 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './Home.css';
-import Product from '../product/Product';
-import { db } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Header.css';
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import { useStateValue } from '../stateProvider/StateProvider';
+import { getAuth, signOut } from 'firebase/auth';
+import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
 
-function Home() {
-    const { category } = useParams();
-    const [products, setProducts] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(category || null);
-    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+function Header() {
+    const [{ basket, user }, dispatch] = useStateValue();// eslint-disable-next-line
+    const navigate = useNavigate();
+    const auth = getAuth();
+    const firestore = getFirestore(); // Initialize Firestore
+    const [searchTerm, setSearchTerm] = useState('');
+    const [category, setCategory] = useState('');
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const productsSnapshot = await getDocs(collection(db, 'products'));
-                const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                setProducts(productsList);
-
-                const categoryMap = {};
-                productsList.forEach(product => {
-                    if (!categoryMap[product.category]) {
-                        categoryMap[product.category] = {};
-                    }
-                    if (!categoryMap[product.category][product.subcategory]) {
-                        categoryMap[product.category][product.subcategory] = 0;
-                    }
-                    categoryMap[product.category][product.subcategory]++;
-                });
-
-                const uniqueCategories = Object.keys(categoryMap).map(category => ({
-                    name: category,
-                    subcategories: Object.keys(categoryMap[category]).map(subcategory => ({
-                        name: subcategory,
-                        count: categoryMap[category][subcategory]
-                    }))
-                }));
-                setCategories(uniqueCategories);
-            } catch (error) {
-                console.error("Error fetching products: ", error);
-            }
-        };
-
-        fetchProducts();
-    }, []);
-
-    useEffect(() => {
-        if (category) {
-            setSelectedCategory(category);
+    const handleLogin = () => {
+        if (user) {
+            signOut(auth).then(() => {
+                navigate('/login');
+            });
+        } else {
+            navigate('/login');
         }
-    }, [category]);
-
-    const handleCategoryClick = (category) => {
-        setSelectedCategory(category === selectedCategory ? null : category);
-        setSelectedSubcategory(null);
     };
 
-    const handleSubcategoryClick = (subcategory) => {
-        setSelectedSubcategory(subcategory === selectedSubcategory ? null : subcategory);
+    const handleSearchSubmit = async (event) => {
+        event.preventDefault(); // Prevent default form behavior
+        const searchTermLower = searchTerm.toLowerCase();
+        const categoryLower = category.toLowerCase();
+        const productsRef = collection(firestore, "products");
+        let q;
+
+        if (category && searchTerm) {
+            // Search by both category and name using lowercased fields for case-insensitive matching
+            q = query(productsRef, where("category_lower", "==", categoryLower), where("name_lower", "==", searchTermLower));
+        } else if (category) {
+            // Search by category only, using lowercased field
+            q = query(productsRef, where("category_lower", "==", categoryLower));
+        } else if (searchTerm) {
+            // Search by name only, using lowercased field
+            q = query(productsRef, where("name_lower", "==", searchTermLower));
+        } else {
+            // Get all products if no filters are applied
+            q = query(productsRef);
+        }
+
+        const querySnapshot = await getDocs(q);
+        const products = [];
+        querySnapshot.forEach((doc) => {
+            products.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Example: Navigate to a search results page with products as state
+        navigate('/search-results', { state: { products } });
     };
 
     return (
-        <>
-            <div className="home__background"></div>
-            <div className="home__categories">
-                {categories.map((category, index) => (
-                    <button
-                        key={index}
-                        className="home__categoryButton"
-                        onClick={() => handleCategoryClick(category)}
-                    >
-                        {category.name}
-                    </button>
-                ))}
-            </div>
-            {selectedCategory && (
-                <div className="home__subcategory">
-                    <h2>{selectedCategory.name}</h2>
-                    <div className="home__subcategories">
-                        {selectedCategory.subcategories.map((sub, subIndex) => (
-                            <button
-                                key={subIndex}
-                                className="home__subcategoryItem"
-                                onClick={() => handleSubcategoryClick(sub.name)}
-                            >
-                                {sub.name} ({sub.count})
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-            {selectedSubcategory && (
-                <div className="home__row">
-                    {products.filter(product => product.category === selectedCategory.name && product.subcategory === selectedSubcategory.name).map(item => (
-                        <Product
-                            key={item.id}
-                            id={item.id}
-                            title={item.title}
-                            image={item.image}
-                            price={item.price}
-                            rating={item.rating}
-                            category={item.category}
-                            subcategory={item.subcategory}
-                        />
-                    ))}
-                </div>
-            )}
+        <nav className="header">
+            <Link to="/">
+                <img className="header__logo" src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/Logo.png?alt=media&token=26afe3eb-41d9-4777-af31-dac3499d6dee" alt="Store Logo" />
+            </Link>
+            
+            <form className="header__search" onSubmit={handleSearchSubmit}>
+                <input
+                    type="text"
+                    className="header__searchInput"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <select
+                    className="header__searchCategory"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
+                    <option value="">All Categories</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="poultry & meat">Poultry & Meat</option>
+                    <option value="bakery">Bakery</option>
+                    <option value="vegetables">Vegetables</option>
+                </select>
+                <button type="submit" className="header__searchIcon">
+                    <SearchIcon />
+                </button>
+            </form>
 
-            {/* Features Section */}
-            <section className="features" id="features">
-                <h1 className="heading"> our <span>features</span> </h1>
-                <div className="box-container">
-                    <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/dose-juice-atUjuLuFEcc-unsplash%20(1).jpg?alt=media&token=856481ac-3a8c-48ff-aaa8-a2186afd346d" alt="Fresh vegetables and fruits" />
-                        <h3>fresh and organic</h3>
-                        <p>Fresh vegetables and fruits at cheap prices.</p>
-                        <button className="btn" onClick={() => alert("More about fresh and organic")}>read more</button>
+            <div className="header__nav">
+                <Link to={!user && "/login"} className="header__link" onClick={handleLogin}>
+                    <div className="header__option">
+                        <span className="header__optionLineOne">Hello, {user ? user.email : "Guest"}</span>
+                        <span className="header__optionLineTwo">{user ? "Sign Out" : "Sign In"}</span>
                     </div>
-                    <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/rowan-freeman-clYlmCaQbzY-unsplash.jpg?alt=media&token=f8a5783a-4633-4cba-9069-63157bad0ab9" alt="Fast delivery service" />
-                        <h3>free delivery</h3>
-                        <p>We always do fast delivery for our customers.</p>
-                        <button className="btn" onClick={() => alert("More about fast delivery")}>read more</button>
+                </Link>
+                <Link to="/orders" className="header__link">
+                    <div className="header__option">
+                        <span className="header__optionLineOne">Returns</span>
+                        <span className="header__optionLineTwo">& Orders</span>
                     </div>
-                    <div className="box">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/nature-s-cart.appspot.com/o/63559496-online-shopping-with-credit-card-easy-payment-for-order-with-plastic-card-through-internet.jpg?alt=media&token=61396e55-aea5-463d-ae43-8b773ea3373a" alt="Easy payment options" />
-                        <h3>easy payments</h3>
-                        <p>It's very easy to pay on our website.</p>
-                        <button className="btn" onClick={() => alert("More about easy payments")}>read more</button>
+                </Link>
+                <Link to="/checkout" className="header__link">
+                    <div className="header__optionBasket">
+                        <ShoppingBasketIcon />
+                        <span className="header__optionLineTwo header__basketCount">{basket?.length}</span>
                     </div>
-                </div>
-            </section>
-        </>
+                </Link>
+            </div>
+        </nav>
     );
 }
 
-export default Home;
+export default Header;
