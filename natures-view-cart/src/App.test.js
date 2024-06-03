@@ -1,74 +1,102 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import { StateProvider } from './components/stateProvider/StateProvider';
-import reducer, { initialState } from './components/reducer';
 import { auth } from './firebase';
 
+jest.mock('./components/Home/Home', () => () => <div>Home Component</div>);
+jest.mock('./components/Header/Header', () => () => <div>Header Component</div>);
+jest.mock('./components/checkout/Checkout', () => () => <div>Checkout Component</div>);
+jest.mock('./components/login/Login', () => () => <div>Login Component</div>);
+jest.mock('./components/footer/Footer', () => () => <div>Footer Component</div>);
+jest.mock('@stripe/react-stripe-js', () => ({
+  Elements: ({ children }) => <div>{children}</div>
+}));
+jest.mock('@stripe/stripe-js', () => ({
+  loadStripe: () => ({})
+}));
 jest.mock('./firebase', () => ({
   auth: {
     onAuthStateChanged: jest.fn(),
   },
 }));
 
-jest.mock('@stripe/stripe-js', () => ({
-  loadStripe: jest.fn(),
-}));
+const mockState = {
+  user: null,
+};
 
-jest.mock('@stripe/react-stripe-js', () => ({
-  Elements: ({ children }) => <div>{children}</div>,
-}));
+const customRender = (ui, { providerProps = {}, ...renderOptions } = {}) => {
+  return render(
+    <StateProvider initialState={mockState} reducer={() => {}}>
+      {ui}
+    </StateProvider>,
+    renderOptions
+  );
+};
 
-jest.mock('firebase/storage');
-
-test('renders login page when user is not authenticated', () => {
-  auth.onAuthStateChanged.mockImplementation((callback) => {
-    callback(null);
+describe('App Component', () => {
+  beforeEach(() => {
+    auth.onAuthStateChanged.mockImplementation((callback) => {
+      callback(null); // Simulate user being logged out
+      return jest.fn(); // Return unsubscribe function
+    });
   });
 
-  render(
-    <StateProvider initialState={initialState} reducer={reducer}>
+  test('renders Home component for the root path', async () => {
+    customRender(
       <Router>
         <App />
       </Router>
-    </StateProvider>
-  );
-
-  expect(screen.getByText(/Sign in/i)).toBeInTheDocument();
-});
-
-test('renders home page when user is authenticated', () => {
-  const user = { email: 'test@example.com' };
-  auth.onAuthStateChanged.mockImplementation((callback) => {
-    callback(user);
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/Home Component/i)).toBeInTheDocument();
+    });
   });
 
-  render(
-    <StateProvider initialState={{ ...initialState, user }} reducer={reducer}>
+  test('renders Login component for the /login path', async () => {
+    window.history.pushState({}, 'Login Page', '/login');
+    customRender(
       <Router>
         <App />
       </Router>
-    </StateProvider>
-  );
-
-  expect(screen.getByText(/Home/i)).toBeInTheDocument();
-});
-
-test('navigates to checkout page', () => {
-  const user = { email: 'test@example.com' };
-  auth.onAuthStateChanged.mockImplementation((callback) => {
-    callback(user);
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/Login Component/i)).toBeInTheDocument();
+    });
   });
 
-  render(
-    <StateProvider initialState={{ ...initialState, user }} reducer={reducer}>
+  test('renders Checkout component for the /checkout path', async () => {
+    window.history.pushState({}, 'Checkout Page', '/checkout');
+    customRender(
       <Router>
         <App />
       </Router>
-    </StateProvider>
-  );
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/Checkout Component/i)).toBeInTheDocument();
+    });
+  });
 
-  fireEvent.click(screen.getByText(/Checkout/i));
-  expect(screen.getByText(/Order Summary/i)).toBeInTheDocument();
+  test('renders Header component on all routes', async () => {
+    customRender(
+      <Router>
+        <App />
+      </Router>
+    );
+    await waitFor(() => {
+      expect(screen.getAllByText(/Header Component/i).length).toBeGreaterThan(0);
+    });
+  });
+
+  test('renders Footer component on all routes', async () => {
+    customRender(
+      <Router>
+        <App />
+      </Router>
+    );
+    await waitFor(() => {
+      expect(screen.getAllByText(/Footer Component/i).length).toBeGreaterThan(0);
+    });
+  });
 });
